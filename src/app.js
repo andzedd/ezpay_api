@@ -1,5 +1,6 @@
 import express from "express"
 import db from "./config/dbConnect.js"
+import produtos from "./models/Produto.js"
 
 db.on("error", console.log.bind(console, 'Erro de conexão com o banco'))
 db.once("open", () => {
@@ -10,18 +11,19 @@ const app = express();
 
 app.use(express.json())
 
-const produtos = [
-    {id: 1, "titulo": "Macarrão"},
-    {id: 2, "titulo": "Arroz"},
-    {id: 3, "titulo": "Açúcar"}
-]
+
 
 app.get('/', (req,res) => {
     res.status(200).send('EZPAY API');
 })
 
-app.get('/produtos', (req,res) => {
-    res.status(200).json(produtos);
+app.get('/produtos', async (req,res) => {
+    try{
+        const resultado = await produtos.find();
+        res.status(200).json(resultado)
+    } catch (err) {
+        res.status(500).json(err);
+    }
 })
 
 app.get('/produtos/:id', (req,res) => {
