@@ -9,6 +9,16 @@ class ProdutoController{
             res.status(500).json(err);
         }
     }
+
+    static cadastrarProduto = async (req,res) => {
+        let produto = new produtos(req.body);
+        try{
+            await produto.save();
+            res.status(201).send(produto.toJSON());
+        } catch (err){
+            res.status(500).send({message: `${err.message} - erro ao cadastrar novo produto`});
+        }
+    }
 }
 
 export default ProdutoController;
